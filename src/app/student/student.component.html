@@ -1,0 +1,164 @@
+<div call="student_style mt-2">
+  <div class="card-header bg-success mt-2 text-white text-center">
+    <h1>Student List</h1>
+  </div>
+  <div class="mt-1">
+    <button
+      class="btn btn-warning w-100"
+      data-bs-toggle="modal"
+      data-bs-target="#add-edit-Modal"
+    >
+      Add
+    </button>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <td>Name</td>
+          <td>Roll</td>
+          <td>Address</td>
+          <td>View</td>
+          <td>Edit</td>
+          <td>Delete</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of allStudents">
+          <td>{{ student.name }}</td>
+          <td>{{ student.roll }}</td>
+          <td>{{ student.address }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-outline-success"
+              (click)="getStudentById(student._id)"
+              data-bs-toggle="modal"
+              data-bs-target="#viewModal"
+            >
+              View
+            </button>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-outline-warning mx-2"
+              data-bs-toggle="modal"
+              data-bs-target="#add-edit-Modal"
+            >
+              Edit
+            </button>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteStudentById(student._id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- View Model Start-->
+
+<div
+  class="modal fade"
+  id="viewModal"
+  tabindex="-1"
+  aria-labelledby="viewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalLabel">Studetn Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="card text-center">
+          <div class="card-boyd">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <strong>Name : </strong>{{ oneStudent?.name }}
+              </li>
+              <li class="list-group-item">
+                <strong>Roll : </strong> {{ oneStudent?.roll }}
+              </li>
+              <li class="list-group-item">
+                <strong>Address : </strong> {{ oneStudent?.address }}
+              </li>
+              <li class="list-group-item">A third item</li>
+            </ul>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card-header bg-info"><b>Subject</b></div>
+                <ul
+                  *ngFor="let sub of oneStudent?.subject"
+                  class="list-group list-group-flush"
+                >
+                  <li class="list-group-item">{{ sub.name }}</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <div class="card-header bg-success text-white">Marks</div>
+                <ul
+                  *ngFor="let sub of oneStudent?.subject"
+                  class="list-group list-group-flush"
+                >
+                  <li class="list-group-item">{{ sub.marks.marks }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Model End-->
+
+<!-- Add & Edit Modal -->
+<div
+  class="modal fade"
+  id="add-edit-Modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add & Edit Modal End -->
