@@ -78,6 +78,7 @@
           class="btn-close"
           data-bs-dismiss="modal"
           aria-label="Close"
+          (click)="close()"
         ></button>
       </div>
 
@@ -93,6 +94,15 @@
               </li>
               <li class="list-group-item">
                 <strong>Address : </strong> {{ oneStudent?.address }}
+              </li>
+              <li class="list-group-item">
+                <strong>Country: </strong> {{ oneStudent?.country }}
+              </li>
+              <li class="list-group-item">
+                <strong>State : </strong> {{ oneStudent?.state }}
+              </li>
+              <li class="list-group-item">
+                <strong>City : </strong> {{ oneStudent?.city }}
               </li>
             </ul>
             <div class="row">
@@ -120,7 +130,12 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="close()"
+          data-bs-dismiss="modal"
+        >
           Close
         </button>
         <button type="button" class="btn btn-primary">Save changes</button>
@@ -184,6 +199,51 @@
               id="exampleInputEmail1"
             />
           </div>
+          <!-- Country Input -->
+          <div class="mb-3">
+            <label for="exampleInputEmail" class="form-label">Country</label>
+            <select
+              (change)="changeCountry($any($event.target).value)"
+              class="form-select"
+              formControlName="country"
+              aria-label="Default select country"
+            >
+              <option selected>Select You Country</option>
+              <option *ngFor="let country of countries" [value]="country.id">
+                {{ country.name }}
+              </option>
+            </select>
+          </div>
+          <!-- States Input -->
+          <div class="mb-3">
+            <label for="exampleInputCountry" class="form-label">State</label>
+            <select
+              (change)="changeStates($any($event.target).value)"
+              class="form-select"
+              formControlName="state"
+              aria-label="Default select state"
+              value="test"
+            >
+              <option selected value="test">Select You State</option>
+              <option *ngFor="let state of states" [value]="state.id">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+          <!-- City Input -->
+          <div class="mb-3">
+            <label for="exampleInputCountry" class="form-label">City</label>
+            <select
+              formControlName="city"
+              class="form-select"
+              aria-label="Default select City"
+            >
+              <option selected>Select You City</option>
+              <option *ngFor="let city of cities" [value]="city.id">
+                {{ city.name }}
+              </option>
+            </select>
+          </div>
           <!-- Subject and Mark Input -->
 
           <div formArrayName="subject">
@@ -240,10 +300,20 @@
             Close
           </button>
 
-          <button type="submit" *ngIf="addButton" class="btn btn-success">
+          <button
+            [disabled]="studentForm.invalid"
+            type="submit"
+            *ngIf="addButton"
+            class="btn btn-success"
+          >
             Submit
           </button>
-          <button type="submit" *ngIf="updateButton" class="btn btn-success">
+          <button
+            [disabled]="studentForm.invalid"
+            type="submit"
+            *ngIf="updateButton"
+            class="btn btn-success"
+          >
             Update
           </button>
         </form>
