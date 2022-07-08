@@ -68,8 +68,8 @@ export class StudentComponent implements OnInit {
   async getStudentById(id: any) {
     this.oneStudent = await this.studentService.getStudentById(id).toPromise();
 
-    await this.changeCountry(this.oneStudent.country);
-    await this.changeStates(this.oneStudent.state);
+    // await this.changeCountry(this.oneStudent.country);
+    // await this.changeStates(this.oneStudent.state);
 
     this.myCountry = await this.cscService.getCountry().toPromise();
     this.myState = await this.cscService
@@ -130,6 +130,7 @@ export class StudentComponent implements OnInit {
     this.id = id;
 
     this.editData = await this.studentService.getStudentById(id).toPromise();
+
     if (this.editData.country) {
       this.changeCountry(this.editData.country);
     }
@@ -174,6 +175,7 @@ export class StudentComponent implements OnInit {
     });
   }
 
+  //-----------close function-----------//
   close() {
     this.newsubjData.splice(0, this.newsubjData.length);
     this.subFromArray.controls.splice(0, this.subFromArray.length);
@@ -198,6 +200,7 @@ export class StudentComponent implements OnInit {
         .updateStudetnById(this.id, this.studentForm.value)
         .subscribe((res) => {
           alert('Student Updated successfully');
+          this.getAllStudent();
         });
       this.studentForm.reset();
 
@@ -218,6 +221,9 @@ export class StudentComponent implements OnInit {
         this.states = null;
         this.states = res;
       });
+    } else {
+      this.states = null;
+      this.cities = null;
     }
   }
 
@@ -228,6 +234,8 @@ export class StudentComponent implements OnInit {
         this.cities = null;
         this.cities = res;
       });
+    } else {
+      this.cities = null;
     }
   }
 }

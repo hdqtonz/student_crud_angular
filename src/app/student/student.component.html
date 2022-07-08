@@ -208,7 +208,7 @@
               formControlName="country"
               aria-label="Default select country"
             >
-              <option selected>Select You Country</option>
+              <option selected [ngValue]="null">Select Your Country</option>
               <option *ngFor="let country of countries" [value]="country.id">
                 {{ country.name }}
               </option>
@@ -222,9 +222,8 @@
               class="form-select"
               formControlName="state"
               aria-label="Default select state"
-              value="test"
             >
-              <option selected value="test">Select You State</option>
+              <option selected [value]="null">Select Your State</option>
               <option *ngFor="let state of states" [value]="state.id">
                 {{ state.name }}
               </option>
@@ -238,7 +237,7 @@
               class="form-select"
               aria-label="Default select City"
             >
-              <option selected>Select You City</option>
+              <option selected [value]="null">Select Your City</option>
               <option *ngFor="let city of cities" [value]="city.id">
                 {{ city.name }}
               </option>
