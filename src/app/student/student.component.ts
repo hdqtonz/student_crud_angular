@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CscService } from '../service/csc.service';
+import { FileService } from '../service/file.service';
 import { StudetnService } from '../service/studetn.service';
 
 interface subjectData {
@@ -14,6 +15,9 @@ interface subjectData {
   styleUrls: ['./student.component.css'],
 })
 export class StudentComponent implements OnInit {
+  @ViewChild('singleUpload', { static: false })
+  singleUpload!: ElementRef;
+
   public allStudents?: any = [];
   public oneStudent: any;
   addButton = false;
@@ -30,16 +34,21 @@ export class StudentComponent implements OnInit {
   myCountry: any;
   myState: any;
   myCity: any;
+  myFile: any;
+  multipleFiles: any;
+  FilesData: any;
 
   constructor(
     private studentService: StudetnService,
     private fb: FormBuilder,
-    private cscService: CscService
+    private cscService: CscService,
+    private fileService: FileService
   ) {
     this.studentForm = this.fb.group({
       name: ['', [Validators.required]],
       roll: [null, [Validators.required]],
       address: ['', [Validators.required]],
+      file: [''],
       country: [null, [Validators.required]],
       state: [null, [Validators.required]],
       city: [null, [Validators.required]],
@@ -186,13 +195,17 @@ export class StudentComponent implements OnInit {
   //----------Add Student--------------//
   submit() {
     if (this.addButton) {
+      //**--Post Student Value--**//
       this.studentService
         .addNewStudent(this.studentForm.value)
-        .subscribe((res) => {
+        .subscribe((res: any) => {
           this.getAllStudent();
+
+          console.log(res.data);
           alert('Student Added successfully');
         });
-      console.log(this.studentForm.value);
+
+      //**--Reset The Form--**//
       this.studentForm.reset();
     }
     if (this.updateButton) {
@@ -238,4 +251,53 @@ export class StudentComponent implements OnInit {
       this.cities = null;
     }
   }
+
+  //---------On File Change-----------//
+  onFileChange(event: any) {
+    if (event.target.files) {
+      const File = event.target.files[0];
+      this.myFile = File;
+    }
+  }
+
+  //------- On Many File Chagne--------//
+  onManyFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.multipleFiles = event.target.files;
+    }
+  }
+
+  //------- Multiple Files Upload--------//
+  onMultipleFiles() {
+    const formdata = new FormData();
+    for (let img of this.multipleFiles) {
+      formdata.append('files', img);
+    }
+    this.fileService.multipleFileUpload(formdata).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  //------- On File Upload--------//
+  onUploadFile() {
+    this.singleUpload.nativeElement.value = '';
+    //**--File Upload--**//
+    const fromData = new FormData();
+    fromData.append('file', this.myFile);
+
+    //**--Post Request for file--**//
+    this.fileService.FileUpload(fromData).subscribe((res: any) => {
+      console.log(res.data);
+      this.studentForm.controls['file'].setValue(res.data);
+    });
+    console.log(this.studentForm.value);
+  }
+
+  //------------ Tyring New Method for File Upload --------//
+  // onFilesChange(event: any) {
+  //   const file = event.target.files[0];
+  //   this.FilesData = file;
+  //   this.studentForm.controls['file'].setValue(file);
+  //   console.log(this.studentForm.value);
+  // }
 }

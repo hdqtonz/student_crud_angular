@@ -1,4 +1,4 @@
-<div call="student_style mt-2">
+<div call="student_style mt-2" style="height: 100%">
   <div class="card-header bg-success mt-2 text-white text-center">
     <h1>Student List</h1>
   </div>
@@ -177,6 +177,7 @@
               id="exampleInputEmail1"
             />
           </div>
+
           <!-- Roll Input -->
           <div class="mb-3">
             <label for="exampleInputEmail" class="form-label">Roll</label>
@@ -189,9 +190,10 @@
               id="exampleInputEmail1"
             />
           </div>
+
           <!-- Address Input -->
           <div class="mb-3">
-            <label for="exampleInputEmail" class="form-label">Address</label>
+            <label for="exampleInputAddress" class="form-label">Address</label>
             <input
               type="text"
               class="form-control"
@@ -199,6 +201,47 @@
               id="exampleInputEmail1"
             />
           </div>
+          <!-- File Upload -->
+          <div class="mb-3">
+            <label for="fileUpload">Upload File</label>
+            <div class="input-group">
+              <input
+                (change)="onFileChange($event)"
+                class="form-control"
+                id="fileUploadInput"
+                #singleUpload
+                type="file"
+              />
+
+              <div class="input-group-prepend">
+                <a class="btn btn-dark" (click)="onUploadFile()">Upload</a>
+              </div>
+            </div>
+          </div>
+
+          <!--Multiple Files Upload -->
+          <!-- <div class="mb-3">
+            <label for="fileUpload">Many Upload File</label>
+            <input
+              (change)="onManyFileChange($event)"
+              class="form-control"
+              id="fileUploadInput"
+              type="file"
+              multiple
+            />
+          </div> -->
+
+          <!--New Method Files Upload -->
+          <!-- <div class="mb-3">
+            <label for="fileUpload">File Upload New Method</label>
+            <input
+              (change)="onFilesChange($event)"
+              class="form-control"
+              id="fileUploadInput"
+              type="file"
+            />
+          </div> -->
+
           <!-- Country Input -->
           <div class="mb-3">
             <label for="exampleInputEmail" class="form-label">Country</label>
@@ -214,6 +257,7 @@
               </option>
             </select>
           </div>
+
           <!-- States Input -->
           <div class="mb-3">
             <label for="exampleInputCountry" class="form-label">State</label>
@@ -229,6 +273,7 @@
               </option>
             </select>
           </div>
+
           <!-- City Input -->
           <div class="mb-3">
             <label for="exampleInputCountry" class="form-label">City</label>
@@ -243,8 +288,8 @@
               </option>
             </select>
           </div>
-          <!-- Subject and Mark Input -->
 
+          <!-- Subject and Mark Input -->
           <div formArrayName="subject">
             <div>
               <a
