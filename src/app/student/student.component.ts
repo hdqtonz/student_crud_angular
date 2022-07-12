@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CscService } from '../service/csc.service';
-import { FileService } from '../service/file.service';
+
 import { StudetnService } from '../service/studetn.service';
 
 interface subjectData {
@@ -36,19 +36,18 @@ export class StudentComponent implements OnInit {
   myCity: any;
   myFile: any;
   multipleFiles: any;
-  FilesData: any;
+  FilesData: Array<string> = [];
 
   constructor(
     private studentService: StudetnService,
     private fb: FormBuilder,
-    private cscService: CscService,
-    private fileService: FileService
+    private cscService: CscService
   ) {
     this.studentForm = this.fb.group({
       name: ['', [Validators.required]],
       roll: [null, [Validators.required]],
       address: ['', [Validators.required]],
-      file: [''],
+      file: [null, [Validators.required]],
       country: [null, [Validators.required]],
       state: [null, [Validators.required]],
       city: [null, [Validators.required]],
@@ -190,28 +189,71 @@ export class StudentComponent implements OnInit {
     this.subFromArray.controls.splice(0, this.subFromArray.length);
     this.states = null;
     this.cities = null;
+    this.FilesData = [];
   }
 
   //----------Add Student--------------//
   submit() {
     if (this.addButton) {
       //**--Post Student Value--**//
-      this.studentService
-        .addNewStudent(this.studentForm.value)
-        .subscribe((res: any) => {
-          this.getAllStudent();
+      let form = this.studentForm.value;
+      let formData = new FormData();
 
-          console.log(res.data);
-          alert('Student Added successfully');
-        });
+      formData.append('name', form.name);
+      formData.append('roll', form.roll);
+      formData.append('address', form.address);
+      formData.append('country', form.country);
+      formData.append('state', form.state);
+      formData.append('city', form.city);
+
+      for (let file of this.multipleFiles) {
+        formData.append('file', file);
+      }
+      // formData.append('file', form.file);
+
+      for (let i = 0; i < form.subject.length; i++) {
+        formData.append(`subject[${i}][name]`, form.subject[i].name);
+        formData.append(`subject[${i}][marks]`, form.subject[i].marks);
+      }
+
+      this.studentService.addNewStudent(formData).subscribe((res: any) => {
+        this.getAllStudent();
+        this.singleUpload.nativeElement.value = '';
+        console.log(res.data);
+        alert('Student Added successfully');
+      });
 
       //**--Reset The Form--**//
       this.studentForm.reset();
     }
     if (this.updateButton) {
+      //**--Post Student Value--**//
+      let form = this.studentForm.value;
+
+      let formData = new FormData();
+
+      formData.append('name', form.name);
+      formData.append('roll', form.roll);
+      formData.append('address', form.address);
+      formData.append('country', form.country);
+      formData.append('state', form.state);
+      formData.append('city', form.city);
+      // formData.append('file', form.file);
+      for (let file of this.multipleFiles) {
+        formData.append('file', file);
+      }
+
+      for (let i = 0; i < form.subject.length; i++) {
+        formData.append(`subject[${i}][name]`, form.subject[i].name);
+        formData.append(`subject[${i}][marks]`, form.subject[i].marks);
+      }
+
       this.studentService
-        .updateStudetnById(this.id, this.studentForm.value)
+        .updateStudetnById(this.id, formData)
         .subscribe((res) => {
+          console.log(res);
+          this.singleUpload.nativeElement.value = '';
+
           alert('Student Updated successfully');
           this.getAllStudent();
         });
@@ -253,51 +295,75 @@ export class StudentComponent implements OnInit {
   }
 
   //---------On File Change-----------//
-  onFileChange(event: any) {
-    if (event.target.files) {
-      const File = event.target.files[0];
-      this.myFile = File;
-    }
-  }
 
-  //------- On Many File Chagne--------//
-  onManyFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      this.multipleFiles = event.target.files;
-    }
-  }
+  // onFileChange(event: any) {
+  //   if (event.target.files) {
+  //     const File = event.target.files[0];
+  //     this.myFile = File;
+  //   }
+  // }
+
+  // //------- On Many File Chagne--------//
+
+  // onManyFileChange(event: any) {
+  //   if (event.target.files.length > 0) {
+  //     this.multipleFiles = event.target.files;
+  //   }
+  // }
 
   //------- Multiple Files Upload--------//
-  onMultipleFiles() {
-    const formdata = new FormData();
-    for (let img of this.multipleFiles) {
-      formdata.append('files', img);
-    }
-    this.fileService.multipleFileUpload(formdata).subscribe((res) => {
-      console.log(res);
-    });
-  }
+
+  // onMultipleFiles() {
+  //   const formdata = new FormData();
+  //   for (let img of this.multipleFiles) {
+  //     formdata.append('files', img);
+  //   }
+  //   this.fileService.multipleFileUpload(formdata).subscribe((res) => {
+  //     console.log(res);
+  //   });
+  // }
 
   //------- On File Upload--------//
-  onUploadFile() {
-    this.singleUpload.nativeElement.value = '';
-    //**--File Upload--**//
-    const fromData = new FormData();
-    fromData.append('file', this.myFile);
 
-    //**--Post Request for file--**//
-    this.fileService.FileUpload(fromData).subscribe((res: any) => {
-      console.log(res.data);
-      this.studentForm.controls['file'].setValue(res.data);
-    });
-    console.log(this.studentForm.value);
-  }
+  // onUploadFile() {
+  //   this.singleUpload.nativeElement.value = '';
+  //   //**--File Upload--**//
+  //   const fromData = new FormData();
+  //   fromData.append('file', this.myFile);
 
-  //------------ Tyring New Method for File Upload --------//
-  // onFilesChange(event: any) {
-  //   const file = event.target.files[0];
-  //   this.FilesData = file;
-  //   this.studentForm.controls['file'].setValue(file);
+  //   //**--Post Request for file--**//
+  //   this.fileService.FileUpload(fromData).subscribe((res: any) => {
+  //     console.log(res.data);
+  //     this.studentForm.controls['file'].setValue(res.data);
+  //   });
   //   console.log(this.studentForm.value);
   // }
+
+  //------------ Tyring New Method for File Upload --------//
+  onFilesChange(event: any) {
+    // const file = event.target.files[0];
+    // // this.FilesData = file;
+    // this.studentForm.controls['file'].setValue(file);
+    // console.log(this.studentForm.value);
+
+    if (event.target.files.length > 0) {
+      var filesAmount = event.target.files.length;
+
+      for (let i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
+
+        reader.onload = (event: any) => {
+          this.FilesData.push(event.target.result);
+
+          this.studentForm.patchValue({
+            file: this.FilesData,
+          });
+        };
+
+        reader.readAsDataURL(event.target.files[i]);
+      }
+      const files = event.target.files;
+      this.multipleFiles = files;
+    }
+  }
 }

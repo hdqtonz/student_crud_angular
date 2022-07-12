@@ -104,6 +104,10 @@
               <li class="list-group-item">
                 <strong>City : </strong> {{ oneStudent?.city }}
               </li>
+              <li *ngFor="let img of oneStudent?.file" class="list-group-item">
+                <strong>Image</strong>
+                <img class="img-fluid" [src]="img" alt="" />
+              </li>
             </ul>
             <div class="row">
               <div class="col-md-6">
@@ -202,7 +206,7 @@
             />
           </div>
           <!-- File Upload -->
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="fileUpload">Upload File</label>
             <div class="input-group">
               <input
@@ -217,7 +221,7 @@
                 <a class="btn btn-dark" (click)="onUploadFile()">Upload</a>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!--Multiple Files Upload -->
           <!-- <div class="mb-3">
@@ -232,15 +236,24 @@
           </div> -->
 
           <!--New Method Files Upload -->
-          <!-- <div class="mb-3">
+          <div class="mb-3">
             <label for="fileUpload">File Upload New Method</label>
             <input
               (change)="onFilesChange($event)"
               class="form-control"
               id="fileUploadInput"
+              #singleUpload
               type="file"
+              multiple
             />
-          </div> -->
+          </div>
+          <div class="mb-3">
+            <div class="row" *ngIf="FilesData">
+              <div class="col-md-6 mt-1" *ngFor="let file of FilesData">
+                <img class="img-fluid" [src]="file" alt="" />
+              </div>
+            </div>
+          </div>
 
           <!-- Country Input -->
           <div class="mb-3">
