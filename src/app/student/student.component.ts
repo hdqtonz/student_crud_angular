@@ -139,12 +139,6 @@ export class StudentComponent implements OnInit {
 
     this.editData = await this.studentService.getStudentById(id).toPromise();
 
-    if (this.editData.country) {
-      this.changeCountry(this.editData.country);
-    }
-    if (this.editData.state) {
-      this.changeStates(this.editData.state);
-    }
     this.subjectData = this.editData.subject;
 
     this.addButton = false;
@@ -158,6 +152,14 @@ export class StudentComponent implements OnInit {
   setvalueform() {
     this.close();
     this.studentForm.reset();
+
+    if (this.editData.country) {
+      this.changeCountry(this.editData.country);
+    }
+    if (this.editData.state) {
+      this.changeStates(this.editData.state);
+    }
+
     for (let i = 0; i < this.subjectData.length; i++) {
       let Data: any = {
         name: null,
@@ -181,6 +183,19 @@ export class StudentComponent implements OnInit {
       city: this.editData.city,
       subject: this.newsubjData,
     });
+  }
+  //----------- Remove Subject --------------//
+  removeItem(index: any) {
+    if (this.newsubjData.length <= 0) {
+      this.subFromArray.controls.splice(index, 1);
+    }
+
+    if (this.newsubjData.length > 0) {
+      this.subFromArray.controls.splice(index, 1);
+      this.subjectData.splice(index, 1);
+
+      this.setvalueform();
+    }
   }
 
   //-----------close function-----------//

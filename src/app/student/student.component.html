@@ -318,7 +318,7 @@
             >
               <div class="row">
                 <!-- Subject Name Start -->
-                <div class="col-md-6 mb-3">
+                <div class="col-md-5 mb-3">
                   <label for="exampleInputSubject" class="form-label"
                     >Subject</label
                   >
@@ -332,7 +332,8 @@
                 <!-- Subject Name End -->
 
                 <!-- Subject Marks Start-->
-                <div class="col-md-6 mb-3">
+
+                <div class="col-md-5 mb-3">
                   <label for="exampleInputMark" class="form-label">Mark</label>
                   <input
                     type="number"
@@ -341,6 +342,18 @@
                     id="sub{{ i }}"
                   />
                 </div>
+                <div class="col-md-1">
+                  <label for="exampleInputMark" class="form-label"
+                    >Delete</label
+                  >
+                  <input
+                    type="button"
+                    class="btn btn-outline-danger"
+                    value="X"
+                    (click)="removeItem(i)"
+                  />
+                </div>
+
                 <!-- Subject Marks End-->
               </div>
             </div>
